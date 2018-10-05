@@ -1,12 +1,4 @@
-#include <iostream>
-#include <vector>
-#include <exception>
-#include <bitset>
-#include <cmath>
-
-using std::vector;
-using std::cout;
-using std::cin;
+#include "utf_8.h"
 
 
 int8_t number_of_octets(const uint32_t &number) {
@@ -110,14 +102,14 @@ vector<uint32_t> from_utf8(vector<uint8_t> &x) {
     return result;
 }
 
-int main() {
-    uint32_t a = 66376;
-    vector<uint32_t> b = {a};
-    vector<uint8_t> n = to_utf8(b);
+//int main() {
+//    uint32_t a = 66376;
+//    vector<uint32_t> b = {a};
+//    vector<uint8_t> n = to_utf8(b);
 //    vector<uint8_t> a = {240, 144, 141, 136};
 //    vector<uint32_t> n = from_utf8(a);
-    return 0;
-}
+//    return 0;
+//}
 
 
 
