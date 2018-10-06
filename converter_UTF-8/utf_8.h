@@ -18,8 +18,8 @@ using std::cin;
 using std::endl;
 
 int8_t number_of_octets(const uint32_t &number);
-vector<uint8_t> to_utf8(vector<uint32_t> &x);
-vector<uint32_t> from_utf8(vector<uint8_t> &x);
+vector<uint8_t> to_utf8(const vector<uint32_t> &x);
+vector<uint32_t> from_utf8(const vector<uint8_t> &x);
 
 
 #endif //CONVERTER_UTF_8_UTF_8_H
