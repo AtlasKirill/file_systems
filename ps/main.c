@@ -31,28 +31,22 @@ int main() {
         if (!isdigit(entry->d_name[0]))
             continue;
 
-        char *tmp_proc=malloc(sizeof(char)*sizeof(directory_proc));
-        char *tmp_stat=malloc(sizeof(char)*sizeof(stat));
+        char *tmp_proc=malloc(sizeof(char)*30);
 
-        strcpy(tmp_proc,directory_proc);
-        strcpy(tmp_stat,stat);
+        snprintf(tmp_proc,30,"%s%s%s",directory_proc,entry->d_name,stat);
 
-        char *partly_way = strcat(tmp_proc, entry->d_name);
-        char *way_to_stat = strcat(partly_way, tmp_stat);
-        file_status = fopen(way_to_stat, "r");
+        file_status = fopen(tmp_proc, "r");
         if (file_status == NULL) {
             perror("file open:");
             exit(1);
         }
         fscanf(file_status, "%d %s %c", &statFile.pid, statFile.name, &statFile.status);
         fclose(file_status);
-        if (statFile.status == 'R') {
-//            printf("%c\n", statFile.status);
+        if (statFile.status == 'S') {
             printf("PID - %s, name - %s \n",
                    entry->d_name,statFile.name );
         }
         free(tmp_proc);
-        free(tmp_stat);
     };
 
     closedir(dir);
