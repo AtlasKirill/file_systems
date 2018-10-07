@@ -46,11 +46,13 @@ int main() {
         }
         fscanf(file_status, "%d %s %c", &statFile.pid, statFile.name, &statFile.status);
         fclose(file_status);
-        if (statFile.status == 'R') {
+        if (statFile.status == 'D') {
 //            printf("%c\n", statFile.status);
             printf("PID - %s, name - %s \n",
                    entry->d_name,statFile.name );
         }
+        free(tmp_proc);
+        free(tmp_stat);
     };
 
     closedir(dir);
