@@ -1,63 +1,65 @@
 #include "utf_8.h"
 
+
+//enum State and consistency_check function are needed
+//for checking whether input stream of uint8_t to from_utf8 function is correct
 enum States {
-    first_bit, two_bits, three_bits, four_bits, other_bits
+    first_byte, two_bytes, three_bytes, four_bytes
 };
 
-
 bool consistency_check(const vector<uint8_t> &x) {
-    States state = first_bit;
+    States state = first_byte;
     uint8_t bit_counter = 0;
     for (const auto &item:x) {
         const uint8_t cur_bit = item;
         switch (state) {
-            case first_bit:
+            case first_byte:
                 if (cur_bit >> 7 == 0)
                     continue;
                 else if (cur_bit >> 5 == 0b110) {
                     bit_counter++;
-                    state = two_bits;
+                    state = two_bytes;
                     continue;
                 } else if (cur_bit >> 4 == 0b1110) {
                     bit_counter++;
-                    state = three_bits;
+                    state = three_bytes;
                     continue;
                 } else if (cur_bit >> 3 == 0b11110) {
                     bit_counter++;
-                    state = four_bits;
+                    state = four_bytes;
                     continue;
                 }
                 return false;
-            case two_bits:
+            case two_bytes:
                 if (cur_bit >> 6 == 0b10) {
-                    state = first_bit;
+                    state = first_byte;
                     bit_counter = 0;
                     continue;
                 } else
                     return false;
-            case three_bits:
+            case three_bytes:
                 if (cur_bit >> 6 == 0b10 && bit_counter < 2) {
                     bit_counter++;
                     continue;
                 } else if (cur_bit >> 6 == 0b10 && bit_counter == 2) {
-                    state = first_bit;
+                    state = first_byte;
                     bit_counter = 0;
                     continue;
                 } else
                     return false;
-            case four_bits:
+            case four_bytes:
                 if (cur_bit >> 6 == 0b10 && bit_counter < 3) {
                     bit_counter++;
                     continue;
                 } else if (cur_bit >> 6 == 0b10 && bit_counter == 3) {
-                    state = first_bit;
+                    state = first_byte;
                     bit_counter = 0;
                     continue;
                 } else
                     return false;
         }
     }
-    return true;
+    return state == first_byte;
 
 }
 
@@ -82,7 +84,7 @@ uint8_t number_of_symbol_bytes(const uint8_t &byte) {
         return 3;
     if (byte >> 3 == 0b11110)
         return 4;
-    throw std::runtime_error("Bad imput (wrong format of the byte");
+    throw std::runtime_error("Bad imput wrong format of the byte");
 }
 
 vector<uint8_t> to_utf8(const vector<uint32_t> &x) {
