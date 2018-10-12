@@ -33,7 +33,7 @@ int main() {
 
         char *tmp_proc = malloc(sizeof(char) * 30);
 
-        snprintf(tmp_proc, 30, "%s %s %s", directory_proc, entry->d_name, stat);
+        snprintf(tmp_proc, 30, "%s%s%s", directory_proc, entry->d_name, stat);
 
         file_status = fopen(tmp_proc, "r");
         if (file_status == NULL) {
