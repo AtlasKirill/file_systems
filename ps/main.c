@@ -31,9 +31,9 @@ int main() {
         if (!isdigit(entry->d_name[0]))
             continue;
 
-        char *tmp_proc = malloc(sizeof(char) * 30);
+        char tmp_proc [256];
 
-        snprintf(tmp_proc, 30, "%s%s%s", directory_proc, entry->d_name, stat);
+        snprintf(tmp_proc, 256, "%s%s%s", directory_proc, entry->d_name, stat);
 
         file_status = fopen(tmp_proc, "r");
         if (file_status == NULL) {
@@ -42,11 +42,9 @@ int main() {
         }
         fscanf(file_status, "%d %s %c", &statFile.pid, statFile.name, &statFile.status);
         fclose(file_status);
-        if (statFile.status == 'S') {
-            printf("PID - %s, name - %s \n",
-                   entry->d_name, statFile.name);
-        }
-        free(tmp_proc);
+        printf("PID - %s, status - %c, name - %s\n",
+               entry->d_name, statFile.status, statFile.name);
+
     };
 
     closedir(dir);
