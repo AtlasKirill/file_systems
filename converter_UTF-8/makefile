@@ -20,3 +20,6 @@ test.o: test.cpp
 utf8: utf_8.o test.o
 	$(CC) $(FLAGS) -o test utf_8.o test.o
 
+test: utf8
+	./test
+
