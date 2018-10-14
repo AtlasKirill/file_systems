@@ -1,7 +1,6 @@
-converter_UTF-8/.idea
-converter_UTF-8/CMakeLists.txt
-converter_UTF-8/cmake-build-debug/
-ps/cmake-build-debug/*
-ps/CMakeLists.txt
-ps/.idea
-/lsof.!main.c!
+*
+!/lsof/main.c
+!/ps/main.c
+!/converter_UTF-8/*.cpp
+!/converter_UTF-8/*.h
+!/converter_UTF-8/makefile
