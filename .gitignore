@@ -1,6 +1,7 @@
-*
-!/lsof/main.c
-!/ps/main.c
-!/converter_UTF-8/*.cpp
-!/converter_UTF-8/*.h
-!/converter_UTF-8/makefile
+*.xml
+*.idea
+*.txt
+converter_UTF-8/cmake-build-debug/
+lsof/cmake-build-debug/
+ps/cmake-build-debug/
+
