@@ -11,7 +11,7 @@ const char stat[] = "/stat";
 
 struct stat_file {
     int pid;
-    char name[30];
+    char name[256];
     char status;
 };
 

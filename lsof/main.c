@@ -26,6 +26,10 @@ int main() {
         exit(1);
     };
     while ((proc_entry = readdir(proc_dir)) != NULL) {
+        if(proc_entry==NULL){
+            perror("readdir");
+            exit(1);
+        };
         if (!isdigit(proc_entry->d_name[0]))
             continue;
         snprintf(directory_fd, sizeof(directory_fd), "/proc/%s/fd/", proc_entry->d_name);
@@ -38,11 +42,11 @@ int main() {
                 snprintf(directory_fd, sizeof(directory_fd), "/proc/%s/fd/%s", proc_entry->d_name, fd_entry->d_name);
                 lstat(directory_fd, &status_buffer);
 
-                if (!S_ISDIR(status_buffer.st_mode))
+                if (S_ISDIR(status_buffer.st_mode))
                     continue;
                 if (status_buffer.st_uid != getuid())
                     continue;
-                
+
                 unsigned int buffer_size = 1024;
                 char *buffer = calloc(buffer_size, sizeof(char));//calloc makes string null-terminated
                 readlink(directory_fd, buffer, buffer_size);
