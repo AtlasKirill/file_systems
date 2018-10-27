@@ -4,6 +4,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include <ctype.h>
+#include <errno.h>
 
 
 const char directory_proc[] = "/proc/";
@@ -31,9 +32,9 @@ int main() {
         if (!isdigit(entry->d_name[0]))
             continue;
 
-        char tmp_proc [256];
+        char tmp_proc[256];
 
-        snprintf(tmp_proc, 256, "%s%s%s", directory_proc, entry->d_name, stat);
+        snprintf(tmp_proc, sizeof(tmp_proc), "%s%s%s", directory_proc, entry->d_name, stat);
 
         file_status = fopen(tmp_proc, "r");
         if (file_status == NULL) {
@@ -47,6 +48,11 @@ int main() {
 
     };
 
+    if (errno != 0){
+        printf("Error in reading dir proc/\n");
+        perror("readdir");
+//        exit(1);
+    }
     closedir(dir);
     return 0;
 };

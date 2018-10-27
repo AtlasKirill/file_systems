@@ -6,10 +6,13 @@
 #include <ctype.h>
 #include <sys/stat.h>
 #include <unistd.h>
+#include <errno.h>
 
 const char directory_proc[] = "/proc/";
 
 int main() {
+    errno=0;
+
     char directory_fd[64];
     DIR *proc_dir;
     struct dirent *proc_entry;
@@ -53,8 +56,20 @@ int main() {
                 printf("[pid] - %s, opened file - %s\n", proc_entry->d_name, buffer);
                 free(buffer);
             }
+            if (errno != 0){
+                printf("Error in reading dir /proc/%s/fd/\n",proc_entry->d_name);
+                perror("readdir");
+//                exit(1);
+            }
+
         }
         closedir(fd_dir);
+    }
+
+    if (errno != 0){
+        printf("Error in reading dir /proc/\n");
+        perror("readdir");
+//        exit(1);
     }
     closedir(proc_dir);
     return 0;
