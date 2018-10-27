@@ -10,8 +10,7 @@
 const char directory_proc[] = "/proc/";
 
 int main() {
-    char directory_fd[sizeof("/proc/") + sizeof(char) * 5 + sizeof("/fd/") +
-                      sizeof(char) * 10]; //pid max -- 5-digit number, inode max number is 10-digit number on ext 2/3/4
+    char directory_fd[64];
     DIR *proc_dir;
     struct dirent *proc_entry;
 
@@ -38,7 +37,13 @@ int main() {
                     continue;
                 snprintf(directory_fd, sizeof(directory_fd), "/proc/%s/fd/%s", proc_entry->d_name, fd_entry->d_name);
                 lstat(directory_fd, &status_buffer);
-                unsigned int buffer_size = status_buffer.st_size + 1; // one for null-terminate symbol
+
+                if (!S_ISDIR(status_buffer.st_mode))
+                    continue;
+                if (status_buffer.st_uid != getuid())
+                    continue;
+                
+                unsigned int buffer_size = 1024;
                 char *buffer = calloc(buffer_size, sizeof(char));//calloc makes string null-terminated
                 readlink(directory_fd, buffer, buffer_size);
                 printf("[pid] - %s, opened file - %s\n", proc_entry->d_name, buffer);
