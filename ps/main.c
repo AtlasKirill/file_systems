@@ -51,7 +51,7 @@ int main() {
     if (errno != 0){
         printf("Error in reading dir proc/\n");
         perror("readdir");
-//        exit(1);
+        exit(1);
     }
     closedir(dir);
     return 0;
