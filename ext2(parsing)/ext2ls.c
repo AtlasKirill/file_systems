@@ -19,8 +19,8 @@ int main(int argc, char **argv) {
 
     struct ext2_super_block super_block;
     if (read(image_file, &super_block, sizeof(struct ext2_super_block)) < 0) {
-        perror("Cannot read super block:");
-        exit(1);
+        printf("Cannot read super block:");
+        return(1);
     };
 
     size_t block_size = 0;
@@ -36,8 +36,8 @@ int main(int argc, char **argv) {
     seek_to(image_file, sizeof(struct ext2_group_desc) * block_group_num, SEEK_CUR);
     //reading block group with our inode
     if (read(image_file, &block_group, sizeof(struct ext2_group_desc)) < 0){
-        perror("Cannot read block group:");
-        exit(1);
+        printf("Cannot read block group:");
+        return(1);
     };
     size_t inode_offset = block_group.bg_inode_table * block_size +
                           (inode_number - 1) * sizeof(struct ext2_inode);
@@ -46,8 +46,8 @@ int main(int argc, char **argv) {
     seek_to(image_file, inode_offset, SEEK_SET);
     //reading one inode
     if (read(image_file, &inode, sizeof(struct ext2_inode)) < 0){
-        perror("Cannot read inode:");
-        exit(1);
+        printf("Cannot read inode:");
+        return(1);
     };
 
     if ((inode.i_mode & EXT2_DIR) == 0) {
@@ -64,8 +64,8 @@ int main(int argc, char **argv) {
         size_t offset = inode.i_block[i] * block_size;
         seek_to(image_file, offset, SEEK_SET);
         if (read(image_file, buf[0], block_size) < 0){
-            perror("Cannot read buffer:");
-            exit(1);
+            printf("Cannot read buffer:");
+            return(1);
         };
         struct ext2_dir_entry_2 *dir_entry =
                 (struct ext2_dir_entry_2 *) buf[0];
